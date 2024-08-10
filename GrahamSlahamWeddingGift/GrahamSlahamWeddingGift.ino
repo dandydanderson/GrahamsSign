@@ -6,6 +6,8 @@
 //#define COLOR_ORDER GRB
 #define NUM_LEDS    108 // Number of LEDs in the project
 
+#define FRAMES_PER_SECOND  120
+
 CRGB leds[NUM_LEDS]; // An array for each led address
 
 int ReadDelay = 500;
@@ -14,8 +16,14 @@ int BlinkDelay = 200;
 
 int Brightness = 100;
 
+int hiddenProgramTimerMax = 2000;
+int hiddenProgramTimer = hiddenProgramTimerMax;
+
 CRGB Blue =  CRGB(0, 0, 255);
-CRGB Red =  CRGB(0, 255, 0);
+CRGB Red =  CRGB(0, 255, 0); // GRB
+CRGB Pink =  CRGB(8, 100, 58);
+CRGB Yellow = CRGB(230, 255, 0);
+uint8_t gHue = 0; // rotating "base color" used by many of the patterns
 
 // Declare arrays for each line
 // CRGB leds[17] // 0-16
@@ -40,6 +48,35 @@ void setup()
 
 // Main program loop
 void loop() 
+{
+  // //EachWordProgram();
+  FullLightProgram();
+
+  hiddenProgramTimer--;
+
+  if (hiddenProgramTimer <= 0)
+  {
+    ButStuffProgram();
+    hiddenProgramTimer = hiddenProgramTimerMax;
+  }
+}
+
+void FullLightProgram()
+{
+  rainbowWithGlitter();
+  // send the 'leds' array out to the actual LED strip
+  FastLED.show();  
+  // insert a delay to keep the framerate modest
+  FastLED.delay(1000/FRAMES_PER_SECOND); 
+
+  // do some periodic updates
+  EVERY_N_MILLISECONDS( 20 ) { gHue++; } // slowly cycle the "base color" through the rainbow
+}
+
+// This is the first custom program where
+// each word is highlighed sequentially, and then
+// the fun stuff at the end.
+void EachWordProgram()
 {
   LightHome(Blue);
   delay(ReadDelay);
@@ -88,63 +125,35 @@ void loop()
 
   LightHeart(Red);
   delay(ReadDelay);
+}
 
-
-  // finale!
-  LightBut(Red);
+void ButStuffProgram()
+{
+    // all blinking
+  LightButStuff(Yellow, Pink);
   delay(BlinkDelay);
 
-  LightStuff(Red);
+  FastLED.clear();
   delay(BlinkDelay);
 
-  LightBut(Red);
+  LightButStuff(Yellow, Pink);
   delay(BlinkDelay);
 
-  LightStuff(Red);
+  FastLED.clear();
   delay(BlinkDelay);
 
-  LightBut(Red);
+  LightButStuff(Yellow, Pink);
   delay(BlinkDelay);
 
-  LightStuff(Red);
+  FastLED.clear();
   delay(BlinkDelay);
 
-  LightBut(Red);
+  LightButStuff(Yellow, Pink);
   delay(BlinkDelay);
 
-  LightStuff(Red);
-  delay(BlinkDelay);
-
-  LightBut(Red);
-  delay(BlinkDelay);
-
-  LightStuff(Red);
-  delay(BlinkDelay);
-
-  LightBut(Red);
-  delay(BlinkDelay);
-
-  LightStuff(Red);
-  delay(BlinkDelay);
-
-  LightBut(Red);
-  delay(BlinkDelay);
-
-  LightStuff(Red);
-  delay(BlinkDelay);
-
-  LightBut(Red);
-  delay(BlinkDelay);
-
-  LightStuff(Red);
-  delay(BlinkDelay);
-
-  LightBut(Red);
-  delay(BlinkDelay);
-
-  LightStuff(Red);
-  delay(BlinkDelay);
-
+  //all just on
+  LightButStuff(Yellow, Pink);
+  delay(BlinkDelay*5);
 }
 
 //---------------------------------------
@@ -326,4 +335,47 @@ void LightHeart(CRGB color)
   leds[101] = color;
   leds[102] = color;
   FastLED.show();
+}
+
+void LightButStuff(CRGB color, CRGB heartColor)
+{
+  FastLED.clear();
+  //but
+  leds[48] = color;
+  leds[49] = color;
+  leds[50] = color;
+
+  //stuff
+  leds[23] = color;
+  leds[24] = color;
+  leds[25] = color;
+  leds[26] = color;
+
+  //heart
+  leds[99] = heartColor;
+  leds[100] = heartColor;
+  leds[101] = heartColor;
+  leds[102] = heartColor;
+  FastLED.show();
+}
+
+void rainbow() 
+{
+  // FastLED's built-in rainbow generator
+  fill_rainbow( leds, NUM_LEDS, gHue, 7);
+}
+
+//Fast LED built in program
+void rainbowWithGlitter() 
+{
+  // built-in FastLED rainbow, plus some random sparkly glitter
+  rainbow();
+  addGlitter(80);
+}
+
+void addGlitter( fract8 chanceOfGlitter) 
+{
+  if( random8() < chanceOfGlitter) {
+    leds[ random16(NUM_LEDS) ] += CRGB::White;
+  }
 }
