@@ -4,7 +4,7 @@
 
 //#define LED_TYPE    WS2811 // Light Strip type
 //#define COLOR_ORDER GRB
-#define NUM_LEDS    108 // Number of LEDs in the project
+#define NUM_LEDS    97 // Number of LEDs in the project
 
 #define FRAMES_PER_SECOND  120
 
@@ -55,10 +55,10 @@ void loop()
   hiddenProgramTimer--;
 
   if (hiddenProgramTimer <= 0)
-  {
+   {
     ButStuffProgram();
     hiddenProgramTimer = hiddenProgramTimerMax;
-  }
+   }
 }
 
 void FullLightProgram()
@@ -204,10 +204,11 @@ void LightWhere(CRGB color)
 void LightStuff(CRGB color)
 {
   FastLED.clear();
-  leds[23] = color;
-  leds[24] = color;
-  leds[25] = color;
-  leds[26] = color;
+  leds[71] = color;
+  leds[72] = color;
+  leds[73] = color;
+  leds[74] = color;
+  leds[75] = color;
   FastLED.show();
 }
 
@@ -246,9 +247,11 @@ void LightWe(CRGB color)
 void LightBut(CRGB color)
 {
   FastLED.clear();
-  leds[48] = color;
-  leds[49] = color;
-  leds[50] = color;
+  leds[52] = color;
+  leds[53] = color;
+  leds[54] = color;
+  leds[55] = color;
+  leds[56] = color;
   FastLED.show();
 }
 
@@ -341,21 +344,23 @@ void LightButStuff(CRGB color, CRGB heartColor)
 {
   FastLED.clear();
   //but
-  leds[48] = color;
-  leds[49] = color;
-  leds[50] = color;
+  //leds[52] = color;
+  leds[53] = color;
+  leds[54] = color;
+  leds[55] = color;
+  leds[56] = color;
 
   //stuff
-  leds[23] = color;
-  leds[24] = color;
-  leds[25] = color;
-  leds[26] = color;
+  leds[71] = color;
+  leds[72] = color;
+  leds[73] = color;
+  leds[74] = color;
+  leds[75] = color;
 
   //heart
-  leds[99] = heartColor;
-  leds[100] = heartColor;
-  leds[101] = heartColor;
-  leds[102] = heartColor;
+  leds[8] = heartColor;
+  leds[9] = heartColor;
+  leds[10] = heartColor;
   FastLED.show();
 }
 
